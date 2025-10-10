@@ -17,22 +17,42 @@ counterLabel.textContent = `Games 🎮: ${games}`;
 const incrementButton = document.createElement("button");
 incrementButton.className = "increment-button";
 incrementButton.type = "button";
+const clickIncrement = 1;
 incrementButton.textContent = "Develop Game";
 
+const buyDevButton = document.createElement("button");
+buyDevButton.className = "buy-dev-button";
+buyDevButton.type = "button";
+let devCost = 10;
+const devIncrement = 1;
+const devCostScalar = 1.5;
+buyDevButton.textContent = `Buy Dev (${devCost} Games)`;
+
 incrementButton.addEventListener("click", () => {
-  games += 1;
+  games += clickIncrement;
   counterLabel.textContent = `Games 🎮: ${games}`;
+});
+
+buyDevButton.addEventListener("click", () => {
+  if (games >= devCost) {
+    games -= devCost;
+    UNITS_PER_SECOND += devIncrement;
+    devCost = Math.ceil(devCost * devCostScalar);
+    counterLabel.textContent = `Games 🎮: ${games}`;
+    buyDevButton.textContent = `Buy Dev (${devCost} Games)`;
+  }
 });
 
 counterContainer.appendChild(counterLabel);
 counterContainer.appendChild(incrementButton);
+counterContainer.appendChild(buyDevButton);
 app.appendChild(counterContainer);
 
 document.body.appendChild(app);
 
 // Auto-increment using requestAnimationFrame so we add fractional amounts per frame
 // and achieve a cumulative increase of 1 unit per second.
-const UNITS_PER_SECOND = 1;
+let UNITS_PER_SECOND = 0;
 
 let lastTimestamp: number | null = null;
 let rafId: number | null = null;
