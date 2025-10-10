@@ -30,14 +30,29 @@ app.appendChild(counterContainer);
 
 document.body.appendChild(app);
 
-// Auto-increment: increase the counter by 1 every 1000ms (1 second)
-const AUTO_INCREMENT_AMOUNT = 1;
-const AUTO_INCREMENT_INTERVAL_MS = 1000;
+// Auto-increment using requestAnimationFrame so we add fractional amounts per frame
+// and achieve a cumulative increase of 1 unit per second.
+const UNITS_PER_SECOND = 1;
 
-const intervalId = setInterval(() => {
-  games += AUTO_INCREMENT_AMOUNT;
-  counterLabel.textContent = `Games 🎮: ${games}`;
-}, AUTO_INCREMENT_INTERVAL_MS);
+let lastTimestamp: number | null = null;
+let rafId: number | null = null;
 
-// Clear interval when the page is unloaded to avoid leaks in some environments
-globalThis.addEventListener("unload", () => clearInterval(intervalId));
+function tick(timestamp: number) {
+  if (lastTimestamp === null) lastTimestamp = timestamp;
+  const deltaMs = timestamp - lastTimestamp;
+  lastTimestamp = timestamp;
+
+  const deltaSeconds = deltaMs / 1000;
+  games += UNITS_PER_SECOND * deltaSeconds;
+  // Display with two decimal places to show fractional growth
+  counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
+
+  rafId = globalThis.requestAnimationFrame(tick);
+}
+
+rafId = globalThis.requestAnimationFrame(tick);
+
+// Cancel the animation when the page unloads to avoid leaks
+globalThis.addEventListener("unload", () => {
+  if (rafId !== null) globalThis.cancelAnimationFrame(rafId);
+});
