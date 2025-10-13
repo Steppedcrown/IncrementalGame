@@ -7,29 +7,29 @@ app.className = "app";
 
 // #region State getters/setters
 // Counter UI (private backing values)
-let _games = 0;
-let _gamesPerSecond = 0;
+let _loc = 0;
+let _locPerSecond = 0;
 let _clickIncrement = 1;
 
-function getGames(): number {
-  return _games;
+function getLoc(): number {
+  return _loc;
 }
 
-function setGames(value: number) {
-  _games = value;
+function setLoc(value: number) {
+  _loc = value;
   // keep the display in sync (two decimals)
-  counterLabel.textContent = `Games 🎮: ${_games.toFixed(2)}`;
+  counterLabel.textContent = `${Math.floor(_loc)} Lines of Code`;
   // update purchase buttons enabled state when games changes
   updateAllPurchaseButtons();
 }
 
-function getGamesPerSecond(): number {
-  return _gamesPerSecond;
+function getLocPerSecond(): number {
+  return _locPerSecond;
 }
 
-function setGamesPerSecond(value: number) {
-  _gamesPerSecond = value;
-  incrementLabel.textContent = `${_gamesPerSecond.toFixed(2)} Games/sec`;
+function setLocPerSecond(value: number) {
+  _locPerSecond = value;
+  incrementLabel.textContent = `per sec: ${_locPerSecond.toFixed(1)}`;
 }
 
 function getClickIncrement(): number {
@@ -47,11 +47,11 @@ counterContainer.className = "counter-container";
 
 const counterLabel = document.createElement("div");
 counterLabel.className = "counter-label";
-counterLabel.textContent = `Games 🎮: ${getGames().toFixed(2)}`;
+counterLabel.textContent = `${Math.floor(_loc)} Lines of Code`;
 
 const incrementLabel = document.createElement("div");
 incrementLabel.className = "increment-label";
-incrementLabel.textContent = `${getGamesPerSecond().toFixed(2)} Games/sec`;
+incrementLabel.textContent = `per sec: ${_locPerSecond.toFixed(1)}`;
 
 // Image button (uses keyboard2.jpg). Clicking it acts like the Develop Game button.
 const keyboardButton = document.createElement("button");
@@ -65,7 +65,7 @@ keyboardButton.appendChild(keyboardImg);
 
 keyboardButton.addEventListener(
   "click",
-  () => setGames(getGames() + getClickIncrement()),
+  () => setLoc(getLoc() + getClickIncrement()),
 );
 // #endregion
 
@@ -83,7 +83,7 @@ const purchaseButtons: PurchaseButton[] = [];
 
 function updateAllPurchaseButtons() {
   for (const pb of purchaseButtons) {
-    pb.button.disabled = getGames() < pb.cost;
+    pb.button.disabled = getLoc() < pb.cost;
   }
 }
 
@@ -108,16 +108,15 @@ function createPurchaseButton(
   };
 
   function updateButtonText() {
-    btn.textContent = `${text} (${pb.cost} Games)
-    Total: ${pb.count}`;
+    btn.textContent = `${text} (${pb.cost} LOC) Total: ${pb.count}`;
   }
 
   updateButtonText();
 
   btn.addEventListener("click", () => {
-    if (getGames() >= pb.cost) {
-      setGames(getGames() - pb.cost);
-      setGamesPerSecond(getGamesPerSecond() + pb.increment);
+    if (getLoc() >= pb.cost) {
+      setLoc(getLoc() - pb.cost);
+      setLocPerSecond(getLocPerSecond() + pb.increment);
       pb.cost = Math.ceil(pb.cost * pb.costScalar);
       pb.count += 1;
       updateButtonText();
@@ -126,7 +125,7 @@ function createPurchaseButton(
 
   purchaseButtons.push(pb);
   // initialize disabled state based on current games
-  btn.disabled = getGames() < pb.cost;
+  btn.disabled = getLoc() < pb.cost;
   return btn;
 }
 
@@ -165,7 +164,7 @@ function tick(timestamp: number) {
   lastTimestamp = timestamp;
 
   const deltaSeconds = deltaMs / 1000;
-  setGames(getGames() + getGamesPerSecond() * deltaSeconds);
+  setLoc(getLoc() + getLocPerSecond() * deltaSeconds);
 
   rafId = globalThis.requestAnimationFrame(tick);
 }
