@@ -97,15 +97,16 @@ main.app {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 8px 12px;
-  gap: 6px;
+  padding: 24px;
   text-align: left;
 }
 
 .purchase-head {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* keeps left and right separated */
+  justify-content: space-between;
+  width: 100%; /* Ensure it spans full width of parent */
+  box-sizing: border-box; /* Respect padding */
 }
 
 .purchase-main {
@@ -127,7 +128,7 @@ main.app {
 .purchase-count {
   font-size: 1.4rem;
   font-weight: 700;
-  width: 56px; /* fixed column on the right */
+  width: 64px; /* fixed column on the right */
   text-align: right;
   color: black;
 }
