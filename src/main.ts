@@ -145,19 +145,20 @@ function createPurchaseButton(
   return btn;
 }
 
+//#region Create purchase buttons
 createPurchaseButton(
   "unpaid-intern",
   "Unpaid Intern",
-  0.2,
+  0.5,
   10,
-  1.12,
+  1.2,
   "Fresh out of college and full of passion. Works tirelessly for exposure and a slice of leftover pizza. Produces a few lines of code per second—when not updating their resume.",
 );
 
 createPurchaseButton(
   "coffee-maker",
   "In-Studio Coffee Maker",
-  2,
+  3,
   100,
   1.18,
   "The sacred machine that fuels crunch time. Every cup brewed adds a measurable spike in productivity (and heart palpitations).",
@@ -166,7 +167,7 @@ createPurchaseButton(
 createPurchaseButton(
   "stack-guru",
   "Stack Overflow Guru",
-  20,
+  25,
   1000,
   1.24,
   "A mysterious figure who appears whenever you're stuck. Instantly boosts your efficiency by copy-pasting ancient snippets of wisdom from the internet.",
@@ -175,8 +176,8 @@ createPurchaseButton(
 createPurchaseButton(
   "bug-generator",
   "Procedural Bug Generator",
-  150,
-  5000,
+  200,
+  6000,
   1.3,
   "Turns your simple codebase into a sprawling mess of 'emergent gameplay.' Fixing these bugs somehow counts as writing new code.",
 );
@@ -184,12 +185,11 @@ createPurchaseButton(
 createPurchaseButton(
   "ai-assistant",
   "AI Code Assistant",
-  1000,
-  10000,
+  1250,
+  14000,
   1.25,
-  "Claims it’ll automate your work. Instead, spends 80% of its time explaining your own code back to you and 20% writing slightly broken functions—but it’s fast!",
+  "Claims it’ll automate your work. Instead, spends 80% of its time explaining your own code back to you and 20% writing slightly broken functions—but at least it’s fast!",
 );
-// #endregion
 // #endregion
 
 // #region Assemble UI
