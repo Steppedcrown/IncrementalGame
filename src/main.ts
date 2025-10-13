@@ -4,20 +4,41 @@ import "./style.css";
 const app = document.createElement("main");
 app.className = "app";
 
-// Counter UI
-let games = 0;
-let UNITS_PER_SECOND = 0;
+// Counter UI (private backing values)
+let _games = 0;
+let _gamesPerSecond = 0;
+
+function getGames(): number {
+  return _games;
+}
+
+function setGames(value: number) {
+  _games = value;
+  // keep the display in sync (two decimals)
+  counterLabel.textContent = `Games 🎮: ${_games.toFixed(2)}`;
+  // update purchase buttons enabled state when games changes
+  updateAllPurchaseButtons();
+}
+
+function getGamesPerSecond(): number {
+  return _gamesPerSecond;
+}
+
+function setGamesPerSecond(value: number) {
+  _gamesPerSecond = value;
+  incrementLabel.textContent = `${_gamesPerSecond.toFixed(2)} Games/sec`;
+}
 
 const counterContainer = document.createElement("div");
 counterContainer.className = "counter-container";
 
 const counterLabel = document.createElement("div");
 counterLabel.className = "counter-label";
-counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
+counterLabel.textContent = `Games 🎮: ${getGames().toFixed(2)}`;
 
 const incrementLabel = document.createElement("div");
 incrementLabel.className = "increment-label";
-incrementLabel.textContent = `${UNITS_PER_SECOND.toFixed(2)} Games/sec`;
+incrementLabel.textContent = `${getGamesPerSecond().toFixed(2)} Games/sec`;
 
 const incrementButton = document.createElement("button");
 incrementButton.className = "increment-button";
@@ -38,7 +59,7 @@ const purchaseButtons: PurchaseButton[] = [];
 
 function updateAllPurchaseButtons() {
   for (const pb of purchaseButtons) {
-    pb.button.disabled = games < pb.cost;
+    pb.button.disabled = getGames() < pb.cost;
   }
 }
 
@@ -68,27 +89,22 @@ function createPurchaseButton(
   updateButtonText();
 
   btn.addEventListener("click", () => {
-    if (games >= pb.cost) {
-      games -= pb.cost;
-      UNITS_PER_SECOND += pb.increment;
+    if (getGames() >= pb.cost) {
+      setGames(getGames() - pb.cost);
+      setGamesPerSecond(getGamesPerSecond() + pb.increment);
       pb.cost = Math.ceil(pb.cost * pb.costScalar);
       updateButtonText();
-      counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
-      incrementLabel.textContent = `${UNITS_PER_SECOND.toFixed(2)} Games/sec`;
-      updateAllPurchaseButtons();
     }
   });
 
   purchaseButtons.push(pb);
   // initialize disabled state based on current games
-  btn.disabled = games < pb.cost;
+  btn.disabled = getGames() < pb.cost;
   return btn;
 }
 
 incrementButton.addEventListener("click", () => {
-  games += clickIncrement;
-  counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
-  updateAllPurchaseButtons();
+  setGames(getGames() + clickIncrement);
 });
 
 // Purchase buttons:
@@ -122,9 +138,7 @@ function tick(timestamp: number) {
   lastTimestamp = timestamp;
 
   const deltaSeconds = deltaMs / 1000;
-  games += UNITS_PER_SECOND * deltaSeconds;
-  // Display with two decimal places to show fractional growth
-  counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
+  setGames(getGames() + getGamesPerSecond() * deltaSeconds);
 
   rafId = globalThis.requestAnimationFrame(tick);
 }
