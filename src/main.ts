@@ -6,13 +6,14 @@ app.className = "app";
 
 // Counter UI
 let games = 0;
+let UNITS_PER_SECOND = 0;
 
 const counterContainer = document.createElement("div");
 counterContainer.className = "counter-container";
 
 const counterLabel = document.createElement("div");
 counterLabel.className = "counter-label";
-counterLabel.textContent = `Games 🎮: ${games}`;
+counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
 
 const incrementButton = document.createElement("button");
 incrementButton.className = "increment-button";
@@ -20,39 +21,89 @@ incrementButton.type = "button";
 const clickIncrement = 1;
 incrementButton.textContent = "Develop Game";
 
-const buyDevButton = document.createElement("button");
-buyDevButton.className = "buy-dev-button";
-buyDevButton.type = "button";
-let devCost = 10;
-const devIncrement = 1;
-const devCostScalar = 1.5;
-buyDevButton.textContent = `Buy Dev (${devCost} Games)`;
+// Purchase button factory + registry
+type PurchaseButton = {
+  name: string;
+  button: HTMLButtonElement;
+  cost: number;
+  costScalar: number;
+  increment: number;
+};
+
+const purchaseButtons: PurchaseButton[] = [];
+
+function updateAllPurchaseButtons() {
+  for (const pb of purchaseButtons) {
+    pb.button.disabled = games < pb.cost;
+  }
+}
+
+function createPurchaseButton(
+  name: string,
+  text: string,
+  increment: number,
+  initialCost: number,
+  costScalar = 1.5,
+): HTMLButtonElement {
+  const btn = document.createElement("button");
+  btn.className = `${name}`;
+  btn.type = "button";
+
+  const pb: PurchaseButton = {
+    name,
+    button: btn,
+    cost: initialCost,
+    costScalar,
+    increment,
+  };
+
+  function updateButtonText() {
+    btn.textContent = `${text} (${pb.cost} Games)`;
+  }
+
+  updateButtonText();
+
+  btn.addEventListener("click", () => {
+    if (games >= pb.cost) {
+      games -= pb.cost;
+      UNITS_PER_SECOND += pb.increment;
+      pb.cost = Math.ceil(pb.cost * pb.costScalar);
+      updateButtonText();
+      counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
+      updateAllPurchaseButtons();
+    }
+  });
+
+  purchaseButtons.push(pb);
+  // initialize disabled state based on current games
+  btn.disabled = games < pb.cost;
+  return btn;
+}
 
 incrementButton.addEventListener("click", () => {
   games += clickIncrement;
-  counterLabel.textContent = `Games 🎮: ${games}`;
+  counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
+  updateAllPurchaseButtons();
 });
 
-buyDevButton.addEventListener("click", () => {
-  if (games >= devCost) {
-    games -= devCost;
-    UNITS_PER_SECOND += devIncrement;
-    devCost = Math.ceil(devCost * devCostScalar);
-    counterLabel.textContent = `Games 🎮: ${games}`;
-    buyDevButton.textContent = `Buy Dev (${devCost} Games)`;
-  }
-});
+// Example purchase button: a developer who increases units/sec by 1
+createPurchaseButton("dev", "Buy Dev", 1, 10, 1.5);
 
 counterContainer.appendChild(counterLabel);
 counterContainer.appendChild(incrementButton);
-counterContainer.appendChild(buyDevButton);
+// Append every purchase button that was created via createPurchaseButton()
+for (const pb of purchaseButtons) {
+  counterContainer.appendChild(pb.button);
+}
 app.appendChild(counterContainer);
+
+// Ensure button enabled/disabled states are correct on initial render
+updateAllPurchaseButtons();
 
 document.body.appendChild(app);
 
 // Auto-increment using requestAnimationFrame so we add fractional amounts per frame
 // and achieve a cumulative increase of 1 unit per second.
-let UNITS_PER_SECOND = 0;
 
 let lastTimestamp: number | null = null;
 let rafId: number | null = null;
