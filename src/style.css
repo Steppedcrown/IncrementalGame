@@ -53,7 +53,20 @@ main.app {
 
 .auto-buttons {
   margin-left: auto; /* push to right */
+  --btn-height: 56px; /* configurable button height */
+  display: grid;
+  grid-auto-rows: var(--btn-height);
+  row-gap: 8px;
+  align-items: stretch;
+  width: 200px; /* all buttons same width */
+}
+
+.auto-buttons button {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
   display: flex;
-  gap: 8px;
   align-items: center;
+  justify-content: center;
+  padding: 0 12px;
 }
