@@ -105,12 +105,13 @@ main.app {
 .purchase-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* keeps left and right separated */
 }
 
 .purchase-main {
   display: flex;
   flex-direction: column;
+  align-items: flex-start; /* left-align title and cost */
 }
 
 .purchase-title {
@@ -126,8 +127,8 @@ main.app {
 .purchase-count {
   font-size: 1.4rem;
   font-weight: 700;
-  margin-left: 12px;
-  align-self: center;
+  width: 56px; /* fixed column on the right */
+  text-align: right;
   color: black;
 }
 
