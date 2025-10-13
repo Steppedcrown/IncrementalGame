@@ -53,6 +53,7 @@ type PurchaseButton = {
   cost: number;
   costScalar: number;
   increment: number;
+  count: number;
 };
 
 const purchaseButtons: PurchaseButton[] = [];
@@ -80,10 +81,12 @@ function createPurchaseButton(
     cost: initialCost,
     costScalar,
     increment,
+    count: 0,
   };
 
   function updateButtonText() {
-    btn.textContent = `${text} (${pb.cost} Games)`;
+    btn.textContent = `${text} (${pb.cost} Games)
+    Total: ${pb.count}`;
   }
 
   updateButtonText();
@@ -93,6 +96,7 @@ function createPurchaseButton(
       setGames(getGames() - pb.cost);
       setGamesPerSecond(getGamesPerSecond() + pb.increment);
       pb.cost = Math.ceil(pb.cost * pb.costScalar);
+      pb.count += 1;
       updateButtonText();
     }
   });
