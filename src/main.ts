@@ -15,6 +15,10 @@ const counterLabel = document.createElement("div");
 counterLabel.className = "counter-label";
 counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
 
+const incrementLabel = document.createElement("div");
+incrementLabel.className = "increment-label";
+incrementLabel.textContent = `${UNITS_PER_SECOND.toFixed(2)} Games/sec`;
+
 const incrementButton = document.createElement("button");
 incrementButton.className = "increment-button";
 incrementButton.type = "button";
@@ -70,6 +74,7 @@ function createPurchaseButton(
       pb.cost = Math.ceil(pb.cost * pb.costScalar);
       updateButtonText();
       counterLabel.textContent = `Games 🎮: ${games.toFixed(2)}`;
+      incrementLabel.textContent = `${UNITS_PER_SECOND.toFixed(2)} Games/sec`;
       updateAllPurchaseButtons();
     }
   });
@@ -92,6 +97,7 @@ createPurchaseButton("dev-team", "Buy Dev Team", 2, 100, 1.5); // Team of develo
 createPurchaseButton("dev-studio", "Buy Dev Studio", 50, 1000, 1.75); // Studio of developers who increase units/sec by 50
 
 counterContainer.appendChild(counterLabel);
+counterContainer.appendChild(incrementLabel);
 counterContainer.appendChild(incrementButton);
 // Append every purchase button that was created via createPurchaseButton()
 for (const pb of purchaseButtons) {
