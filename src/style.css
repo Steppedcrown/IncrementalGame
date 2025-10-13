@@ -1,7 +1,7 @@
 .keyboard-button {
   /* make the button a circle */
   width: min(30vw, 1920px);
-  height: min(30vw, 1920px);
+  height: min(20vw, 1440px);
   padding: 0;
   border: none;
   background: transparent;
@@ -49,6 +49,27 @@ main.app {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+/* configurable font sizes for labels */
+:root {
+  --counter-font-size: 36px;
+  --increment-font-size: 30px;
+}
+
+.counter-container {
+  align-items: center; /* center labels and button horizontally */
+}
+
+.counter-label {
+  font-size: var(--counter-font-size);
+  text-align: center;
+}
+
+.increment-label {
+  font-size: var(--increment-font-size);
+  color: #666;
+  text-align: center;
 }
 
 .auto-buttons {
