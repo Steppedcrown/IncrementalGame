@@ -86,8 +86,10 @@ incrementButton.addEventListener("click", () => {
   updateAllPurchaseButtons();
 });
 
-// Example purchase button: a developer who increases units/sec by 1
-createPurchaseButton("dev", "Buy Dev", 1, 10, 1.5);
+// Purchase buttons:
+createPurchaseButton("dev", "Buy Dev", 0.1, 10, 1.15); // Developer who increases units/sec by 0.1
+createPurchaseButton("dev-team", "Buy Dev Team", 2, 100, 1.5); // Team of developers who increase units/sec by 2
+createPurchaseButton("dev-studio", "Buy Dev Studio", 50, 1000, 1.75); // Studio of developers who increase units/sec by 50
 
 counterContainer.appendChild(counterLabel);
 counterContainer.appendChild(incrementButton);
