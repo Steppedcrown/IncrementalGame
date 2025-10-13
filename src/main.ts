@@ -1,3 +1,4 @@
+import keyboardUrl from "./keyboard2.jpg";
 import "./style.css";
 
 // Create a small app container instead of replacing the whole body.
@@ -8,6 +9,7 @@ app.className = "app";
 // Counter UI (private backing values)
 let _games = 0;
 let _gamesPerSecond = 0;
+let _clickIncrement = 1;
 
 function getGames(): number {
   return _games;
@@ -29,6 +31,14 @@ function setGamesPerSecond(value: number) {
   _gamesPerSecond = value;
   incrementLabel.textContent = `${_gamesPerSecond.toFixed(2)} Games/sec`;
 }
+
+function getClickIncrement(): number {
+  return _clickIncrement;
+}
+
+function _setClickIncrement(value: number) {
+  _clickIncrement = value;
+}
 // #endregion
 
 // #region UI setup
@@ -43,15 +53,20 @@ const incrementLabel = document.createElement("div");
 incrementLabel.className = "increment-label";
 incrementLabel.textContent = `${getGamesPerSecond().toFixed(2)} Games/sec`;
 
-const incrementButton = document.createElement("button");
-incrementButton.className = "increment-button";
-incrementButton.type = "button";
-const clickIncrement = 1;
-incrementButton.textContent = "Develop Game";
+// Image button (uses keyboard2.jpg). Clicking it acts like the Develop Game button.
+const keyboardButton = document.createElement("button");
+keyboardButton.className = "keyboard-button";
+keyboardButton.type = "button";
+const keyboardImg = document.createElement("img");
+keyboardImg.src = keyboardUrl;
+keyboardImg.alt = "Keyboard";
+keyboardImg.className = "keyboard-img";
+keyboardButton.appendChild(keyboardImg);
 
-incrementButton.addEventListener("click", () => {
-  setGames(getGames() + clickIncrement);
-});
+keyboardButton.addEventListener(
+  "click",
+  () => setGames(getGames() + getClickIncrement()),
+);
 // #endregion
 
 // Purchase button factory + registry
@@ -124,7 +139,7 @@ createPurchaseButton("dev-studio", "Buy Dev Studio", 50, 1000, 1.75); // Studio 
 // #region Assemble UI
 counterContainer.appendChild(counterLabel);
 counterContainer.appendChild(incrementLabel);
-counterContainer.appendChild(incrementButton);
+counterContainer.appendChild(keyboardButton);
 // Append every purchase button that was created via createPurchaseButton()
 for (const pb of purchaseButtons) {
   counterContainer.appendChild(pb.button);
