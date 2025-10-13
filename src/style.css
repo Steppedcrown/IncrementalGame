@@ -36,3 +36,24 @@
   outline: 3px solid rgba(0, 120, 215, 0.25);
   outline-offset: 2px;
 }
+
+/* Layout: align auto-buttons to the right */
+main.app {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.counter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auto-buttons {
+  margin-left: auto; /* push to right */
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}

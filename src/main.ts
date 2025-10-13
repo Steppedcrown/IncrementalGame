@@ -53,6 +53,9 @@ const incrementLabel = document.createElement("div");
 incrementLabel.className = "increment-label";
 incrementLabel.textContent = `per sec: ${_locPerSecond.toFixed(1)}`;
 
+const autoButtons = document.createElement("div");
+autoButtons.className = "auto-buttons";
+
 // Image button (uses keyboard2.jpg). Clicking it acts like the Develop Game button.
 const keyboardButton = document.createElement("button");
 keyboardButton.className = "keyboard-button";
@@ -141,9 +144,10 @@ counterContainer.appendChild(incrementLabel);
 counterContainer.appendChild(keyboardButton);
 // Append every purchase button that was created via createPurchaseButton()
 for (const pb of purchaseButtons) {
-  counterContainer.appendChild(pb.button);
+  autoButtons.appendChild(pb.button);
 }
 app.appendChild(counterContainer);
+app.appendChild(autoButtons);
 
 // Ensure button enabled/disabled states are correct on initial render
 updateAllPurchaseButtons();
