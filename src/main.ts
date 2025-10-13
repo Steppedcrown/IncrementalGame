@@ -1,4 +1,4 @@
-import keyboardUrl from "./img/keyboard.jpg";
+import keyboardUrl from "./img/keyboard.png";
 import "./style.css";
 
 // Create a small app container instead of replacing the whole body.
