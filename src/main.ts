@@ -4,6 +4,7 @@ import "./style.css";
 const app = document.createElement("main");
 app.className = "app";
 
+// #region State getters/setters
 // Counter UI (private backing values)
 let _games = 0;
 let _gamesPerSecond = 0;
@@ -28,7 +29,9 @@ function setGamesPerSecond(value: number) {
   _gamesPerSecond = value;
   incrementLabel.textContent = `${_gamesPerSecond.toFixed(2)} Games/sec`;
 }
+// #endregion
 
+// #region UI setup
 const counterContainer = document.createElement("div");
 counterContainer.className = "counter-container";
 
@@ -45,6 +48,11 @@ incrementButton.className = "increment-button";
 incrementButton.type = "button";
 const clickIncrement = 1;
 incrementButton.textContent = "Develop Game";
+
+incrementButton.addEventListener("click", () => {
+  setGames(getGames() + clickIncrement);
+});
+// #endregion
 
 // Purchase button factory + registry
 type PurchaseButton = {
@@ -107,15 +115,13 @@ function createPurchaseButton(
   return btn;
 }
 
-incrementButton.addEventListener("click", () => {
-  setGames(getGames() + clickIncrement);
-});
-
-// Purchase buttons:
+// #region Purchase buttons:
 createPurchaseButton("dev", "Buy Dev", 0.1, 10, 1.15); // Developer who increases units/sec by 0.1
 createPurchaseButton("dev-team", "Buy Dev Team", 2, 100, 1.5); // Team of developers who increase units/sec by 2
 createPurchaseButton("dev-studio", "Buy Dev Studio", 50, 1000, 1.75); // Studio of developers who increase units/sec by 50
+// #endregion
 
+// #region Assemble UI
 counterContainer.appendChild(counterLabel);
 counterContainer.appendChild(incrementLabel);
 counterContainer.appendChild(incrementButton);
@@ -129,9 +135,11 @@ app.appendChild(counterContainer);
 updateAllPurchaseButtons();
 
 document.body.appendChild(app);
+// #endregion
 
+// #region Auto-increment
 // Auto-increment using requestAnimationFrame so we add fractional amounts per frame
-// and achieve a cumulative increase of 1 unit per second.
+// and achieve a cumulative increase of x units per second.
 
 let lastTimestamp: number | null = null;
 let rafId: number | null = null;
@@ -148,6 +156,7 @@ function tick(timestamp: number) {
 }
 
 rafId = globalThis.requestAnimationFrame(tick);
+// #endregion
 
 // Cancel the animation when the page unloads to avoid leaks
 globalThis.addEventListener("unload", () => {
