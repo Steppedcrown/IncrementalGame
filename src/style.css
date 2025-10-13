@@ -10,10 +10,27 @@
   background: white;
   border-radius: 6px;
   margin-left: 8px;
+  cursor: pointer;
+  transform-origin: center;
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
 .keyboard-img {
-  display: block;
-  width: 48px;
+  width: min(30vw, 1920px);
   height: auto;
+}
+
+/* Hover/active/focus interactions for interactive elements */
+.keyboard-button:hover{
+  transform: scale(1.04);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.keyboard-button:active {
+  transform: scale(0.98);
+}
+
+.keyboard-button:focus-visible {
+  outline: 3px solid rgba(0, 120, 215, 0.25);
+  outline-offset: 2px;
 }
