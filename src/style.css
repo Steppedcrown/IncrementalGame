@@ -91,3 +91,47 @@ main.app {
   justify-content: center;
   padding: 0 12px;
 }
+
+/* Structured purchase button layout */
+.purchase-button {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 8px 12px;
+  gap: 6px;
+  text-align: left;
+}
+
+.purchase-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.purchase-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.purchase-title {
+  font-weight: 600;
+  color: black;
+}
+
+.purchase-cost {
+  font-size: 0.9rem;
+  color: black;
+}
+
+.purchase-count {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-left: 12px;
+  align-self: center;
+  color: black;
+}
+
+.purchase-desc {
+  font-size: 0.9rem;
+  color: black;
+}

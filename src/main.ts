@@ -80,6 +80,7 @@ type PurchaseButton = {
   costScalar: number;
   increment: number;
   count: number;
+  description: string;
 };
 
 const purchaseButtons: PurchaseButton[] = [];
@@ -96,9 +97,10 @@ function createPurchaseButton(
   increment: number,
   initialCost: number,
   costScalar = 1.5,
+  description = "",
 ): HTMLButtonElement {
   const btn = document.createElement("button");
-  btn.className = `${name}`;
+  btn.className = `purchase-button ${name}`;
   btn.type = "button";
 
   const pb: PurchaseButton = {
@@ -108,10 +110,21 @@ function createPurchaseButton(
     costScalar,
     increment,
     count: 0,
+    description,
   };
 
   function updateButtonText() {
-    btn.textContent = `${text} (${pb.cost} LOC) Total: ${pb.count}`;
+    // Structured HTML: title + cost on the left, count on the right (spanning two lines), description below.
+    btn.innerHTML = `
+      <div class="purchase-head">
+        <div class="purchase-main">
+          <div class="purchase-title">${text}</div>
+          <div class="purchase-cost">${pb.cost} LOC</div>
+        </div>
+        <div class="purchase-count">${pb.count}</div>
+      </div>
+      <div class="purchase-desc">${pb.description}</div>
+    `;
   }
 
   updateButtonText();
@@ -133,7 +146,7 @@ function createPurchaseButton(
 }
 
 // #region Purchase buttons:
-createPurchaseButton("dev", "Buy Dev", 0.1, 10, 1.15); // Developer who increases units/sec by 0.1
+createPurchaseButton("dev", "Buy Dev", 0.1, 10, 1.15, "descript goes here"); // Developer who increases units/sec by 0.1
 createPurchaseButton("dev-team", "Buy Dev Team", 2, 100, 1.5); // Team of developers who increase units/sec by 2
 createPurchaseButton("dev-studio", "Buy Dev Studio", 50, 1000, 1.75); // Studio of developers who increase units/sec by 50
 // #endregion
