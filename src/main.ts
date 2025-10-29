@@ -5,69 +5,7 @@ import "./style.css";
 const app = document.createElement("main");
 app.className = "app";
 
-// #region State getters/setters
-// Counter UI (private backing values)
-let resource = 0;
-let generationPerSecond = 0;
-const manualClickIncrement = 1;
-
-function returnResource(): number {
-  return resource;
-}
-
-function updateResource(value: number) {
-  resource = value;
-  // keep the display in sync (two decimals)
-  counterLabel.textContent = `${Math.floor(resource)} Lines of Code`;
-  // update purchase buttons enabled state when games changes
-  updateAllPurchaseButtons();
-}
-
-function getGenerationSpeed(): number {
-  return generationPerSecond;
-}
-
-function setGenerationSpeed(value: number) {
-  generationPerSecond = value;
-  incrementLabel.textContent = `per sec: ${generationPerSecond.toFixed(1)}`;
-}
-
-function getClickIncrement(): number {
-  return manualClickIncrement;
-}
-// #endregion
-
-// #region UI setup
-const counterContainer = document.createElement("div");
-counterContainer.className = "counter-container";
-
-const counterLabel = document.createElement("div");
-counterLabel.className = "counter-label";
-counterLabel.textContent = `${Math.floor(resource)} Lines of Code`;
-
-const incrementLabel = document.createElement("div");
-incrementLabel.className = "increment-label";
-incrementLabel.textContent = `per sec: ${generationPerSecond.toFixed(1)}`;
-
-const autoButtons = document.createElement("div");
-autoButtons.className = "auto-buttons";
-
-// Image button (uses keyboard2.jpg). Clicking it acts like the Develop Game button.
-const keyboardButton = document.createElement("button");
-keyboardButton.className = "keyboard-button";
-keyboardButton.type = "button";
-const keyboardImg = document.createElement("img");
-keyboardImg.src = keyboardUrl;
-keyboardImg.alt = "Keyboard";
-keyboardImg.className = "keyboard-img";
-keyboardButton.appendChild(keyboardImg);
-
-keyboardButton.addEventListener(
-  "click",
-  () => updateResource(returnResource() + getClickIncrement()),
-);
-// #endregion
-
+// #region Purchase button logic
 // Purchase button factory + registry
 type PurchaseButton = {
   name: string;
@@ -140,6 +78,83 @@ function createPurchaseButton(
   btn.disabled = returnResource() < pb.cost;
   return btn;
 }
+// #endregion
+
+// #region State getters/setters
+// Counter UI (private backing values)
+let resource = 0;
+let generationPerSecond = 0;
+const manualClickIncrement = 1;
+
+function returnResource(): number {
+  return resource;
+}
+
+function updateResource(value: number) {
+  resource = value;
+  // keep the display in sync (two decimals)
+  counterLabel.textContent = `${Math.floor(resource)} Lines of Code`;
+  // update purchase buttons enabled state when games changes
+  updateAllPurchaseButtons();
+}
+
+function getGenerationSpeed(): number {
+  return generationPerSecond;
+}
+
+function setGenerationSpeed(value: number) {
+  generationPerSecond = value;
+  incrementLabel.textContent = `per sec: ${generationPerSecond.toFixed(1)}`;
+}
+
+function getClickIncrement(): number {
+  return manualClickIncrement;
+}
+// #endregion
+
+// #region UI setup
+const counterContainer = document.createElement("div");
+counterContainer.className = "counter-container";
+
+const counterLabel = document.createElement("div");
+counterLabel.className = "counter-label";
+counterLabel.textContent = `${Math.floor(resource)} Lines of Code`;
+
+const incrementLabel = document.createElement("div");
+incrementLabel.className = "increment-label";
+incrementLabel.textContent = `per sec: ${generationPerSecond.toFixed(1)}`;
+
+const autoButtons = document.createElement("div");
+autoButtons.className = "auto-buttons";
+
+// Image button (uses keyboard2.jpg). Clicking it acts like the Develop Game button.
+const keyboardButton = document.createElement("button");
+keyboardButton.className = "keyboard-button";
+keyboardButton.type = "button";
+const keyboardImg = document.createElement("img");
+keyboardImg.src = keyboardUrl;
+keyboardImg.alt = "Keyboard";
+keyboardImg.className = "keyboard-img";
+keyboardButton.appendChild(keyboardImg);
+
+keyboardButton.addEventListener(
+  "click",
+  () => updateResource(returnResource() + getClickIncrement()),
+);
+
+// Assemble counter container
+counterContainer.appendChild(counterLabel);
+counterContainer.appendChild(incrementLabel);
+counterContainer.appendChild(keyboardButton);
+
+app.appendChild(counterContainer);
+app.appendChild(autoButtons);
+
+// Ensure button enabled/disabled states are correct on initial render
+updateAllPurchaseButtons();
+
+document.body.appendChild(app);
+// #endregion
 
 //#region Create purchase buttons
 createPurchaseButton(
@@ -186,23 +201,11 @@ createPurchaseButton(
   1.25,
   "Claims it’ll automate your work. Instead, spends 80% of its time explaining your own code back to you and 20% writing slightly broken functions—but at least it’s fast!",
 );
-// #endregion
 
-// #region Assemble UI
-counterContainer.appendChild(counterLabel);
-counterContainer.appendChild(incrementLabel);
-counterContainer.appendChild(keyboardButton);
 // Append every purchase button that was created via createPurchaseButton()
 for (const pb of purchaseButtons) {
   autoButtons.appendChild(pb.button);
 }
-app.appendChild(counterContainer);
-app.appendChild(autoButtons);
-
-// Ensure button enabled/disabled states are correct on initial render
-updateAllPurchaseButtons();
-
-document.body.appendChild(app);
 // #endregion
 
 // #region Auto-increment
