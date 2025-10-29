@@ -1,3 +1,7 @@
+// Incremental Game Engine
+// CMPM 121 - D1
+// A generic, reusable idle game core with resource generation and upgrades.
+
 import keyboardUrl from "./img/keyboard.png";
 import "./style.css";
 
@@ -5,7 +9,7 @@ import "./style.css";
 const app = document.createElement("main");
 app.className = "app";
 
-// #region Purchase button logic
+// #region Purchase Button Logic
 // Purchase button factory + registry
 type PurchaseButton = {
   name: string;
@@ -80,7 +84,7 @@ function createPurchaseButton(
 }
 // #endregion
 
-// #region State getters/setters
+// #region Variable Getters/Setters
 // Counter UI (private backing values)
 let resource = 0;
 let generationPerSecond = 0;
@@ -112,7 +116,7 @@ function getClickIncrement(): number {
 }
 // #endregion
 
-// #region UI setup
+// #region UI Setup
 const counterContainer = document.createElement("div");
 counterContainer.className = "counter-container";
 
@@ -156,7 +160,7 @@ updateAllPurchaseButtons();
 document.body.appendChild(app);
 // #endregion
 
-//#region Create purchase buttons
+// #region Create Purchase Buttons
 createPurchaseButton(
   "unpaid-intern",
   "Unpaid Intern",
@@ -208,7 +212,7 @@ for (const pb of purchaseButtons) {
 }
 // #endregion
 
-// #region Auto-increment
+// #region Auto-Increment
 // Auto-increment using requestAnimationFrame so we add fractional amounts per frame
 // and achieve a cumulative increase of x units per second.
 
