@@ -7,29 +7,29 @@ app.className = "app";
 
 // #region State getters/setters
 // Counter UI (private backing values)
-let lines = 0;
-let linesPerSecond = 0;
+let resource = 0;
+let generationPerSecond = 0;
 const manualClickIncrement = 1;
 
-function getLines(): number {
-  return lines;
+function returnResource(): number {
+  return resource;
 }
 
-function setLines(value: number) {
-  lines = value;
+function updateResource(value: number) {
+  resource = value;
   // keep the display in sync (two decimals)
-  counterLabel.textContent = `${Math.floor(lines)} Lines of Code`;
+  counterLabel.textContent = `${Math.floor(resource)} Lines of Code`;
   // update purchase buttons enabled state when games changes
   updateAllPurchaseButtons();
 }
 
-function getLinesPerSecond(): number {
-  return linesPerSecond;
+function getGenerationSpeed(): number {
+  return generationPerSecond;
 }
 
-function setLinesPerSecond(value: number) {
-  linesPerSecond = value;
-  incrementLabel.textContent = `per sec: ${linesPerSecond.toFixed(1)}`;
+function setGenerationSpeed(value: number) {
+  generationPerSecond = value;
+  incrementLabel.textContent = `per sec: ${generationPerSecond.toFixed(1)}`;
 }
 
 function getClickIncrement(): number {
@@ -43,11 +43,11 @@ counterContainer.className = "counter-container";
 
 const counterLabel = document.createElement("div");
 counterLabel.className = "counter-label";
-counterLabel.textContent = `${Math.floor(lines)} Lines of Code`;
+counterLabel.textContent = `${Math.floor(resource)} Lines of Code`;
 
 const incrementLabel = document.createElement("div");
 incrementLabel.className = "increment-label";
-incrementLabel.textContent = `per sec: ${linesPerSecond.toFixed(1)}`;
+incrementLabel.textContent = `per sec: ${generationPerSecond.toFixed(1)}`;
 
 const autoButtons = document.createElement("div");
 autoButtons.className = "auto-buttons";
@@ -64,7 +64,7 @@ keyboardButton.appendChild(keyboardImg);
 
 keyboardButton.addEventListener(
   "click",
-  () => setLines(getLines() + getClickIncrement()),
+  () => updateResource(returnResource() + getClickIncrement()),
 );
 // #endregion
 
@@ -83,7 +83,7 @@ const purchaseButtons: PurchaseButton[] = [];
 
 function updateAllPurchaseButtons() {
   for (const pb of purchaseButtons) {
-    pb.button.disabled = getLines() < pb.cost;
+    pb.button.disabled = returnResource() < pb.cost;
   }
 }
 
@@ -126,9 +126,9 @@ function createPurchaseButton(
   updateButtonText();
 
   btn.addEventListener("click", () => {
-    if (getLines() >= pb.cost) {
-      setLines(getLines() - pb.cost);
-      setLinesPerSecond(getLinesPerSecond() + pb.increment);
+    if (returnResource() >= pb.cost) {
+      updateResource(returnResource() - pb.cost);
+      setGenerationSpeed(getGenerationSpeed() + pb.increment);
       pb.cost = Math.ceil(pb.cost * pb.costScalar);
       pb.count += 1;
       updateButtonText();
@@ -137,7 +137,7 @@ function createPurchaseButton(
 
   purchaseButtons.push(pb);
   // initialize disabled state based on current games
-  btn.disabled = getLines() < pb.cost;
+  btn.disabled = returnResource() < pb.cost;
   return btn;
 }
 
@@ -218,7 +218,7 @@ function tick(timestamp: number) {
   lastTimestamp = timestamp;
 
   const deltaSeconds = deltaMs / 1000;
-  setLines(getLines() + getLinesPerSecond() * deltaSeconds);
+  updateResource(returnResource() + getGenerationSpeed() * deltaSeconds);
 
   rafId = globalThis.requestAnimationFrame(tick);
 }
