@@ -7,37 +7,33 @@ app.className = "app";
 
 // #region State getters/setters
 // Counter UI (private backing values)
-let _loc = 0;
-let _locPerSecond = 0;
-let _clickIncrement = 1;
+let lines = 0;
+let linesPerSecond = 0;
+const manualClickIncrement = 1;
 
-function getLoc(): number {
-  return _loc;
+function getLines(): number {
+  return lines;
 }
 
-function setLoc(value: number) {
-  _loc = value;
+function setLines(value: number) {
+  lines = value;
   // keep the display in sync (two decimals)
-  counterLabel.textContent = `${Math.floor(_loc)} Lines of Code`;
+  counterLabel.textContent = `${Math.floor(lines)} Lines of Code`;
   // update purchase buttons enabled state when games changes
   updateAllPurchaseButtons();
 }
 
-function getLocPerSecond(): number {
-  return _locPerSecond;
+function getLinesPerSecond(): number {
+  return linesPerSecond;
 }
 
-function setLocPerSecond(value: number) {
-  _locPerSecond = value;
-  incrementLabel.textContent = `per sec: ${_locPerSecond.toFixed(1)}`;
+function setLinesPerSecond(value: number) {
+  linesPerSecond = value;
+  incrementLabel.textContent = `per sec: ${linesPerSecond.toFixed(1)}`;
 }
 
 function getClickIncrement(): number {
-  return _clickIncrement;
-}
-
-function _setClickIncrement(value: number) {
-  _clickIncrement = value;
+  return manualClickIncrement;
 }
 // #endregion
 
@@ -47,11 +43,11 @@ counterContainer.className = "counter-container";
 
 const counterLabel = document.createElement("div");
 counterLabel.className = "counter-label";
-counterLabel.textContent = `${Math.floor(_loc)} Lines of Code`;
+counterLabel.textContent = `${Math.floor(lines)} Lines of Code`;
 
 const incrementLabel = document.createElement("div");
 incrementLabel.className = "increment-label";
-incrementLabel.textContent = `per sec: ${_locPerSecond.toFixed(1)}`;
+incrementLabel.textContent = `per sec: ${linesPerSecond.toFixed(1)}`;
 
 const autoButtons = document.createElement("div");
 autoButtons.className = "auto-buttons";
@@ -68,7 +64,7 @@ keyboardButton.appendChild(keyboardImg);
 
 keyboardButton.addEventListener(
   "click",
-  () => setLoc(getLoc() + getClickIncrement()),
+  () => setLines(getLines() + getClickIncrement()),
 );
 // #endregion
 
@@ -87,7 +83,7 @@ const purchaseButtons: PurchaseButton[] = [];
 
 function updateAllPurchaseButtons() {
   for (const pb of purchaseButtons) {
-    pb.button.disabled = getLoc() < pb.cost;
+    pb.button.disabled = getLines() < pb.cost;
   }
 }
 
@@ -130,9 +126,9 @@ function createPurchaseButton(
   updateButtonText();
 
   btn.addEventListener("click", () => {
-    if (getLoc() >= pb.cost) {
-      setLoc(getLoc() - pb.cost);
-      setLocPerSecond(getLocPerSecond() + pb.increment);
+    if (getLines() >= pb.cost) {
+      setLines(getLines() - pb.cost);
+      setLinesPerSecond(getLinesPerSecond() + pb.increment);
       pb.cost = Math.ceil(pb.cost * pb.costScalar);
       pb.count += 1;
       updateButtonText();
@@ -141,7 +137,7 @@ function createPurchaseButton(
 
   purchaseButtons.push(pb);
   // initialize disabled state based on current games
-  btn.disabled = getLoc() < pb.cost;
+  btn.disabled = getLines() < pb.cost;
   return btn;
 }
 
@@ -222,7 +218,7 @@ function tick(timestamp: number) {
   lastTimestamp = timestamp;
 
   const deltaSeconds = deltaMs / 1000;
-  setLoc(getLoc() + getLocPerSecond() * deltaSeconds);
+  setLines(getLines() + getLinesPerSecond() * deltaSeconds);
 
   rafId = globalThis.requestAnimationFrame(tick);
 }
