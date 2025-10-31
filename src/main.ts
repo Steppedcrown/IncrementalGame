@@ -3,7 +3,7 @@
 // A generic, reusable idle game core with resource generation and upgrades.
 
 import keyboardUrl from "./img/keyboard.png";
-//import lightbulbImg from "./img/lightbulb.png";
+import lightbulbImg from "./img/lightbulb.png";
 import "./style.css";
 
 // Create a small app container instead of replacing the whole body.
@@ -144,7 +144,26 @@ keyboardButton.appendChild(keyboardImg);
 
 keyboardButton.addEventListener(
   "click",
-  () => updateResource(returnResource() + getClickIncrement()),
+  () => {
+    updateResource(returnResource() + getClickIncrement());
+
+    // Spawn a lightbulb when clicking main button
+    // Code credit to: https://github.com/adegan1/cmpm121-incremental-andrewdegan/blob/main/src/main.ts#L242
+    const heart = document.createElement("img");
+    heart.src = lightbulbImg;
+    heart.className = "floating-heart";
+
+    const rect = keyboardButton.getBoundingClientRect();
+    heart.style.left = Math.random() * (rect.right - rect.left) +
+      (rect.left - 25) +
+      "px";
+    heart.style.top = rect.top + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 1000);
+  },
 );
 
 // Assemble counter container
