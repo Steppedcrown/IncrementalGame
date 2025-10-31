@@ -3,6 +3,7 @@
 // A generic, reusable idle game core with resource generation and upgrades.
 
 import keyboardUrl from "./img/keyboard.png";
+//import lightbulbImg from "./img/lightbulb.png";
 import "./style.css";
 
 // Create a small app container instead of replacing the whole body.
