@@ -111,6 +111,13 @@ main.app {
   text-align: left;
 }
 
+.purchase-button:enabled,
+.auto-buttons button:enabled {
+  background-color: black;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
 .purchase-head {
   display: flex;
   align-items: center;
