@@ -148,3 +148,25 @@ main.app {
   font-size: 0.8rem;
   color: white;
 }
+
+/* Floating lightbulb (spawned on keyboard button) */
+.floating-bulb {
+  position: fixed; /* positioned by inline left/top (viewport coords) */
+  transform-origin: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+  /* animation: float upward while keeping the scale at 1/3 */
+  animation: float-up 1000ms ease-out forwards;
+}
+
+@keyframes float-up {
+  from {
+    transform: translate(-50%, -50%) scale(0.20);
+    opacity: 1;
+  }
+  to {
+    /* move further upward and fade out; */
+    transform: translate(-50%, -100%) scale(0.10);
+    opacity: 0;
+  }
+}

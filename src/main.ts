@@ -148,20 +148,38 @@ keyboardButton.addEventListener(
     updateResource(returnResource() + getClickIncrement());
 
     // Spawn a lightbulb when clicking main button
-    // Code credit to: https://github.com/adegan1/cmpm121-incremental-andrewdegan/blob/main/src/main.ts#L242
-    const heart = document.createElement("img");
-    heart.src = lightbulbImg;
-    heart.className = "floating-heart";
+    // Place it centered on the keyboard button and scale it down by 1/3.
+    const bulb = document.createElement("img");
+    bulb.src = lightbulbImg;
+    bulb.className = "floating-bulb";
 
     const rect = keyboardButton.getBoundingClientRect();
-    heart.style.left = Math.random() * (rect.right - rect.left) +
-      (rect.left - 25) +
-      "px";
-    heart.style.top = rect.top + "px";
-    document.body.appendChild(heart);
+    // Position at the center of the button (viewport coordinates)
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
 
+    // Add a small random offset so bulbs don't all spawn exactly at the center.
+    // Horizontal jitter: +/- 40% of button width. Vertical jitter: +/- 30% of button height.
+    const jitterX = (Math.random() - 0.5) * rect.width * 0.8; // ±40% width
+    const jitterY = (Math.random() - 0.5) * rect.height * 0.6; // ±30% height
+
+    const spawnX = centerX + jitterX;
+    const spawnY = centerY + jitterY;
+
+    // Use fixed positioning so the image stays aligned to viewport coordinates
+    bulb.style.position = "fixed";
+    bulb.style.left = `${spawnX}px`;
+    bulb.style.top = `${spawnY}px`;
+    // Center the image by translating -50%/-50%. Animation in CSS controls scale.
+    bulb.style.transform = "translate(-50%, -50%)";
+    // Prevent the floating bulb from capturing pointer events
+    bulb.style.pointerEvents = "none";
+
+    document.body.appendChild(bulb);
+
+    // Remove after the animation completes (matches CSS animation duration)
     setTimeout(() => {
-      heart.remove();
+      bulb.remove();
     }, 1000);
   },
 );
