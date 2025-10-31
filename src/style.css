@@ -1,3 +1,12 @@
+body {
+  background-image: url("./img/bg.gif");
+  background-size: cover; /* scale to cover whole viewport */
+  background-position: center; /* center the image */
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* optional: keeps image fixed during scroll */
+  background-color: #fff; /* fallback color while image loads */
+}
+
 .keyboard-button {
   /* make the button a circle */
   width: min(30vw, 1920px);
@@ -64,11 +73,12 @@ main.app {
 .counter-label {
   font-size: var(--counter-font-size);
   text-align: center;
+  color: white;
 }
 
 .increment-label {
   font-size: var(--increment-font-size);
-  color: #666;
+  color: white;
   text-align: center;
 }
 
@@ -118,12 +128,12 @@ main.app {
 .purchase-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: black;
+  color: white;
 }
 
 .purchase-cost {
   font-size: 1.1rem;
-  color: black;
+  color: white;
 }
 
 .purchase-count {
@@ -131,10 +141,10 @@ main.app {
   font-weight: 700;
   width: 64px; /* fixed column on the right */
   text-align: right;
-  color: black;
+  color: white;
 }
 
 .purchase-desc {
   font-size: 0.8rem;
-  color: black;
+  color: white;
 }
